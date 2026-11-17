@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Torf1n — видео, сайты и боты</title>
+<meta name="description" content="ИИ-видео и монтаж Reels, Shorts, TikTok, сайты, лендинги и Telegram-боты под ключ.">
+<meta name="theme-color" content="#07080b">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:title" content="Torf1n — видео, сайты и боты">
+<meta property="og:description" content="ИИ-видео и монтаж, сайты, лендинги и Telegram-боты под ключ.">
+<meta property="og:image" content="brand/avatar-1080.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07080b; --fg:#f1ede4; --muted:#8c8b93; --dim:#56565d;
+  --line:rgba(255,255,255,.09); --card:rgba(18,18,24,.72); --btn:#efe9dc;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-stopped{overflow:hidden}
+body{background:var(--bg);color:var(--fg);font-family:Manrope,system-ui,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:#efe9dc;color:#111}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+#field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,header,footer{position:relative;z-index:2}
+.grain{position:fixed;inset:-50%;z-index:1;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1s steps(4) infinite}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-1%,3%)}}
+
+/* ---------- курсор ---------- */
+.cur,.cur-dot{position:fixed;left:0;top:0;pointer-events:none;z-index:400;display:none}
+.has-cursor .cur-dot{display:block}
+.has-cursor .cur{display:grid}
+.has-cursor,.has-cursor *{cursor:none!important}
+.cur-dot{width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:#fff;mix-blend-mode:difference}
+.cur{width:38px;height:38px;margin:-19px 0 0 -19px;border-radius:50%;border:1px solid rgba(255,255,255,.45);place-items:center;transition:width .35s var(--ease),height .35s var(--ease),margin .35s var(--ease),background .35s,border-color .35s,opacity .3s}
+.cur span{font-size:11px;font-weight:800;color:#111;opacity:0;transition:opacity .2s;white-space:nowrap}
+.cur.hover{width:60px;height:60px;margin:-30px 0 0 -30px;border-color:rgba(255,255,255,.8);background:rgba(255,255,255,.06)}
+.cur.label{width:96px;height:96px;margin:-48px 0 0 -48px;background:var(--btn);border-color:var(--btn)}
+.cur.label span{opacity:1}
+
+/* ---------- шапка ---------- */
+#progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:60;background:linear-gradient(90deg,#b9a7ff,#9fe3ff,#ffd0e6);transform-origin:left;transform:scaleX(0)}
+header{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:14px 32px;z-index:50;transition:background .4s,backdrop-filter .4s,transform .5s var(--ease)}
+header.solid{background:rgba(7,8,11,.66);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--line)}
+header.hide{transform:translateY(-100%)}
+.logo{font-weight:800;font-size:14px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.logo svg{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+nav{display:flex;align-items:center;gap:30px}
+nav a.l{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a9a9b0;position:relative;transition:color .2s}
+nav a.l::after{content:"";position:absolute;left:0;right:0;bottom:-5px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
+nav a.l:hover{color:var(--fg)}
+nav a.l:hover::after{transform:scaleX(1);transform-origin:left}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--btn);color:#111;font-weight:800;font-size:13px;padding:12px 22px;border-radius:999px;transition:transform .35s var(--ease),box-shadow .35s,color .3s;white-space:nowrap;position:relative;overflow:hidden;isolation:isolate}
+.btn::before{content:"";position:absolute;inset:0;background:#fff;border-radius:inherit;transform:translateY(101%);transition:transform .45s var(--ease);z-index:-1}
+.btn:hover{box-shadow:0 12px 36px rgba(239,233,220,.22)}
+.btn:hover::before{transform:none}
+.btn.sm{font-size:12px;padding:9px 18px}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid rgba(255,255,255,.25)}
+.btn.ghost::before{background:var(--btn)}
+.btn.ghost:hover{color:#111}
+
+/* ---------- главный экран ---------- */
+.hero{height:100vh;min-height:600px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 16px;position:relative}
+.hero::before{content:"";position:absolute;left:50%;top:56%;width:min(760px,96vw);height:240px;transform:translate(-50%,-50%);background:radial-gradient(ellipse at center,rgba(7,8,11,.82) 0%,rgba(7,8,11,.5) 45%,transparent 72%);pointer-events:none;z-index:-1}
+.badge{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:600;color:#d9d6de;padding:7px 14px 7px 12px;border:1px solid rgba(255,255,255,.14);border-radius:99px;background:rgba(10,10,14,.5);backdrop-filter:blur(8px);margin-bottom:26px;opacity:0;transform:translateY(14px)}
+.badge i{width:7px;height:7px;border-radius:50%;background:#5df2a0;box-shadow:0 0 0 0 rgba(93,242,160,.6);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 9px rgba(93,242,160,0)}100%{box-shadow:0 0 0 0 rgba(93,242,160,0)}}
+.big{font-family:Unbounded,sans-serif;font-weight:900;letter-spacing:-.045em;line-height:.95;text-transform:lowercase}
+.hero h1{font-size:clamp(46px,9.4vw,150px);text-shadow:0 8px 30px rgba(0,0,0,.6);text-transform:none}
+.hero h1.short{font-size:clamp(56px,11vw,168px);letter-spacing:.025em}
+.hero h1 span{background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.95) 50%,transparent 62%) 120% 0/300% 100% no-repeat,linear-gradient(180deg,#fff 0%,#e9e7ee 45%,#a3a1ac 100%);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;padding-bottom:.08em;margin:0 .13em;display:inline-block;opacity:0;transform:translateY(50px) scale(.9) rotate(4deg);filter:blur(16px)}
+.ready .hero h1 span{animation:rise 1.2s var(--ease) forwards,shine 7s 3s ease-in-out infinite}
+@keyframes rise{to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes shine{0%{background-position:120% 0,0 0}40%,100%{background-position:-20% 0,0 0}}
+.hero p{margin-top:24px;color:#d0ced4;font-size:15px;line-height:1.6;text-shadow:0 0 6px #000,0 0 18px #000,0 0 30px #000;opacity:0;transform:translateY(14px)}
+.ready .badge,.ready .hero p{animation:up .9s .9s var(--ease) forwards}
+.ready .badge{animation-delay:.2s}
+@keyframes up{to{opacity:1;transform:none}}
+.down{margin-top:34px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.45);display:grid;place-items:center;opacity:0;background:rgba(0,0,0,.25);backdrop-filter:blur(6px);transition:transform .35s var(--ease)}
+.ready .down{animation:fade 1s 1.3s forwards}
+.down svg{animation:bob 2.4s ease-in-out infinite}
+@keyframes fade{to{opacity:1}}
+@keyframes bob{50%{transform:translateY(5px)}}
+.hero-foot{position:absolute;left:32px;right:32px;bottom:26px;display:flex;justify-content:space-between;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a3a2aa;opacity:0;text-shadow:0 0 12px #000}
+.ready .hero-foot{animation:fade 1s 1.6s forwards}
+
+/* ---------- бегущая строка ---------- */
+.marquee{position:relative;padding:70px 0;overflow:hidden}
+.mq{display:flex;white-space:nowrap;will-change:transform}
+.mq-row{width:110%;margin-left:-5%}
+.mq-row.a{background:var(--btn);color:#111;transform:rotate(-2.5deg);padding:16px 0;position:relative;z-index:2;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.mq-row.b{background:rgba(14,14,18,.85);transform:rotate(1.8deg);padding:14px 0;margin-top:-26px;border-block:1px solid var(--line);backdrop-filter:blur(6px)}
+.mq span{font-family:Unbounded,sans-serif;font-weight:800;font-size:clamp(22px,3.2vw,40px);letter-spacing:-.03em;text-transform:lowercase;padding:0 22px;display:inline-flex;align-items:center;gap:44px}
+.mq span::after{content:"✿";font-size:.7em;opacity:.7}
+.mq-row.b span{color:transparent;-webkit-text-stroke:1px rgba(241,237,228,.55)}
+.mq-row.b span::after{color:#efe9dc;-webkit-text-stroke:0}
+
+/* ---------- секции ---------- */
+section.s{max-width:1200px;margin:0 auto;padding:120px 32px}
+.eyebrow{display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+.eyebrow::before{content:"";width:34px;height:1px;background:currentColor}
+.center .eyebrow,.contact .eyebrow{justify-content:center}
+.s h2{font-size:clamp(40px,7.4vw,104px);color:var(--fg)}
+.center{text-align:center}
+.rv{opacity:0;transform:translateY(46px);filter:blur(10px);transition:opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease)}
+.rv.in{opacity:1;transform:none;filter:none}
+/* заголовки по буквам */
+.split .w{display:inline-block;overflow:hidden;padding:0 .015em .14em;margin-bottom:-.14em;vertical-align:top}
+.split .ch{display:inline-block;transform:translateY(110%) rotate(8deg);transition:transform 1s var(--ease);transition-delay:calc(var(--i)*28ms)}
+.split.in .ch{transform:none}
+
+/* работы */
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:64px}
+.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:transform .5s var(--ease),border-color .3s,box-shadow .5s;backdrop-filter:blur(8px);height:100%}
+.card:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.2);box-shadow:0 30px 70px rgba(0,0,0,.6)}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.12),transparent 45%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover::after{opacity:1}
+.fan{position:relative;height:250px;background:radial-gradient(ellipse at 50% 60%,var(--glow,rgba(120,100,255,.14)),transparent 70%)}
+.fan>*{position:absolute;left:50%;top:50%;width:112px;aspect-ratio:9/16;object-fit:cover;border-radius:10px;box-shadow:0 14px 34px rgba(0,0,0,.7);transition:transform .7s var(--ease),filter .5s}
+.fan>*:nth-child(1){transform:translate(-50%,-50%) translateX(-66px) rotate(-9deg) scale(.86);filter:brightness(.55)}
+.fan>*:nth-child(3){transform:translate(-50%,-50%) translateX(66px) rotate(9deg) scale(.86);filter:brightness(.55)}
+.fan>*:nth-child(2){transform:translate(-50%,-50%);z-index:2}
+.card:hover .fan>*:nth-child(1){transform:translate(-50%,-50%) translateX(-92px) rotate(-14deg) scale(.9);filter:brightness(.85)}
+.card:hover .fan>*:nth-child(3){transform:translate(-50%,-50%) translateX(92px) rotate(14deg) scale(.9);filter:brightness(.85)}
+.card:hover .fan>*:nth-child(2){transform:translate(-50%,-55%) scale(1.07)}
+.ci{padding:20px 22px 24px;position:relative}
+.meta{font-size:11px;color:var(--dim);letter-spacing:.02em}
+.ci h3{font-family:Unbounded,sans-serif;font-weight:800;font-size:20px;letter-spacing:-.03em;margin:8px 0 8px}
+.ci p{font-size:12.5px;line-height:1.55;color:var(--muted);max-width:84%}
+.arrow{position:absolute;right:20px;bottom:24px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.35);display:grid;place-items:center;transition:background .3s,color .3s,transform .4s var(--ease)}
+.card:hover .arrow{background:var(--btn);color:#111;transform:rotate(-45deg)}
+
+/* мини-макеты сайтов и ботов */
+.mk{width:112px;aspect-ratio:9/16;border-radius:12px;overflow:hidden;box-shadow:0 14px 34px rgba(0,0,0,.7);border:1px solid rgba(255,255,255,.14);font-size:7px;line-height:1.35;text-align:left;display:flex;flex-direction:column}
+.mk.tg{background:#0e1621;color:#e8eef5}
+.mk.tg .bar{background:#17212b;padding:.9em 1em;display:flex;align-items:center;gap:.7em;font-weight:700}
+.mk.tg .av{width:2.2em;height:2.2em;border-radius:50%;background:linear-gradient(135deg,#7b6cff,#3fc6ff)}
+.mk.tg .chat{padding:.9em;display:flex;flex-direction:column;gap:.6em}
+.mk.tg .b{max-width:82%;padding:.6em .8em;border-radius:.9em;background:#182533}
+.mk.tg .b.me{align-self:flex-end;background:#2b5278}
+.mk.tg .kb{display:grid;grid-template-columns:1fr 1fr;gap:.4em}
+.mk.tg .kb span{background:#22344a;border-radius:.6em;padding:.5em;text-align:center;font-weight:600}
+.mk.site{background:radial-gradient(circle at 70% 75%,rgba(255,255,255,.5) 0 1px,transparent 1.5px) 0 0/9px 9px,radial-gradient(ellipse at 50% 85%,#2a2838,#07080b 70%);color:#fff;align-items:center;justify-content:center;gap:1em;padding:1em;text-align:center;position:relative}
+.mk.site .h{font-family:Unbounded,sans-serif;font-weight:900;font-size:2.3em;line-height:.95;letter-spacing:-.05em}
+.mk.site .pill{background:#efe9dc;color:#111;border-radius:99px;padding:.5em 1.2em;font-weight:700}
+.mk.site .nav{position:absolute;top:1em;left:1em;right:1em;display:flex;justify-content:space-between;font-weight:700;opacity:.8}
+.mk.shot-img{object-fit:cover;object-position:top;display:block;background:#07080b}
+.mk.land{background:linear-gradient(180deg,#3a2414,#140c07);color:#fbe9d6;padding:1.2em 1em;gap:.8em}
+.mk.land .img{height:38%;border-radius:.8em;background:radial-gradient(circle at 50% 60%,#c98a52 0 22%,#5b3418 23% 30%,transparent 31%),linear-gradient(135deg,#6b4325,#2b190c)}
+.mk.land .h{font-family:Unbounded,sans-serif;font-weight:800;font-size:1.7em;letter-spacing:-.03em;line-height:1}
+.mk.land .cta{margin-top:auto;background:#ff9a3d;color:#1a0f06;border-radius:99px;padding:.6em;text-align:center;font-weight:800}
+
+/* кейсы */
+.cases{margin-top:40px}
+.case{display:grid;grid-template-columns:340px 1fr;gap:70px;align-items:center;padding:70px 0;border-top:1px solid var(--line)}
+.case:last-child{border-bottom:1px solid var(--line)}
+.case:nth-child(even){grid-template-columns:1fr 340px}
+.case:nth-child(even) .ph-wrap{order:2}
+.ph-wrap{position:relative;display:grid;place-items:center}
+.ph-wrap::before{content:"";position:absolute;width:120%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--accent) 0%,transparent 62%);opacity:.3;filter:blur(20px)}
+.phone{position:relative;width:250px;aspect-ratio:9/19;border-radius:38px;padding:9px;background:linear-gradient(145deg,#34343c,#0c0c0f 40%,#1d1d22);box-shadow:0 40px 80px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.12);will-change:transform}
+.phone::after{content:"";position:absolute;top:17px;left:50%;width:70px;height:20px;margin-left:-35px;border-radius:20px;background:#000;z-index:3}
+.phone>video,.phone>.mk{width:100%;height:100%;object-fit:cover;border-radius:30px;display:block;background:#111}
+.phone>.mk{aspect-ratio:auto;font-size:15px;border:0;box-shadow:none}
+.c-num{font-family:Unbounded,sans-serif;font-weight:700;font-size:12px;color:var(--muted);letter-spacing:.05em}
+.c-num b{color:var(--fg);font-weight:800}
+.case h3{font-family:Unbounded,sans-serif;font-weight:800;font-size:clamp(26px,3.2vw,40px);letter-spacing:-.04em;line-height:1.05;margin:14px 0 18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.14);color:#cfccd4;background:rgba(255,255,255,.03)}
+.c-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin:30px 0 26px}
+.c-grid h5{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;font-weight:700}
+.c-grid p{font-size:13.5px;line-height:1.6;color:#c5c3ca}
+.c-link{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700;border-bottom:1px solid rgba(255,255,255,.3);padding-bottom:4px;transition:gap .3s var(--ease),border-color .3s}
+.c-link:hover{gap:16px;border-color:#fff}
+
+/* цифры */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:22px;background:rgba(14,14,19,.6);backdrop-filter:blur(10px);overflow:hidden}
+.stat{padding:38px 30px;border-right:1px solid var(--line);position:relative}
+.stat:last-child{border-right:0}
+.stat .v{font-family:Unbounded,sans-serif;font-weight:900;font-size:clamp(40px,5vw,66px);letter-spacing:-.05em;line-height:1}
+.stat .l{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.5}
+
+/* цены */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:46px}
+.ph p{max-width:300px;color:var(--muted);font-size:13px;line-height:1.6}
+.row{position:relative;isolation:isolate;overflow:hidden;display:grid;grid-template-columns:240px 1fr 120px 100px;align-items:center;gap:24px;padding:24px 14px;border-top:1px solid var(--line);transition:padding .45s var(--ease),opacity 1.1s var(--ease),transform 1.1s var(--ease),filter 1.1s var(--ease)}
+.row::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(255,255,255,.07),rgba(255,255,255,.015));transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
+.row:last-child{border-bottom:1px solid var(--line)}
+.row:hover{padding-left:28px}
+.row:hover::before{transform:none}
+.row b{font-family:Unbounded,sans-serif;font-weight:700;font-size:17px;letter-spacing:-.02em}
+.row span{color:var(--muted);font-size:12.5px;line-height:1.5}
+.row i{font-style:normal;font-weight:700;font-size:14px}
+.row a{font-size:12px;color:#c9c7cd;text-align:right;transition:color .2s,transform .4s var(--ease)}
+.row:hover a{color:#fff;transform:translateX(-6px)}
+
+/* как работаю */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px}
+.step{position:relative;border-top:1px solid var(--line);padding-top:26px}
+.step::before{content:"";position:absolute;top:-1px;left:0;width:100%;height:1px;background:linear-gradient(90deg,#fff,rgba(255,255,255,0));transform:scaleX(0);transform-origin:left;transition:transform 1.4s .4s var(--ease)}
+.step.in::before{transform:none}
+.step .n{font-family:Unbounded,sans-serif;font-weight:800;font-size:44px;letter-spacing:-.05em;background:linear-gradient(180deg,#fff,#77757f);-webkit-background-clip:text;background-clip:text;color:transparent;transition:transform .5s var(--ease)}
+.step:hover .n{transform:translateY(-6px)}
+.step h4{font-size:15px;font-weight:700;margin:16px 0 10px}
+.step p{font-size:12.5px;color:var(--muted);line-height:1.6}
+.tags{display:flex;gap:26px;flex-wrap:wrap;margin-top:44px;font-size:11.5px;color:var(--dim)}
+
+/* вопросы */
+.faq{max-width:860px;margin:50px auto 0}
+.q{border-top:1px solid var(--line)}
+.q:last-child{border-bottom:1px solid var(--line)}
+.q button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 4px;text-align:left;font-size:17px;font-weight:700;transition:color .2s}
+.q button:hover{color:#fff}
+.q .pl{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.25);position:relative;transition:transform .5s var(--ease),background .3s,color .3s,border-color .3s}
+.q .pl::before,.q .pl::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.5px;margin:-.75px 0 0 -6px;background:currentColor;transition:transform .5s var(--ease)}
+.q .pl::after{transform:rotate(90deg)}
+.q.open .pl{transform:rotate(180deg);background:var(--btn);color:#111;border-color:var(--btn)}
+.q.open .pl::after{transform:rotate(0)}
+.q .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s var(--ease)}
+.q.open .a{grid-template-rows:1fr}
+.q .a>div{overflow:hidden}
+.q .a p{padding:0 60px 26px 4px;color:var(--muted);font-size:14px;line-height:1.7}
+
+/* контакты */
+.contact{min-height:92vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.contact h2{font-size:clamp(44px,8.6vw,136px)}
+.contact p{color:var(--muted);margin:24px 0 34px;font-size:15px}
+.links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+footer{padding:0 32px 26px;overflow:hidden}
+.f-big{font-family:Unbounded,sans-serif;font-weight:900;font-size:11.6vw;letter-spacing:-.06em;line-height:.9;text-align:center;color:transparent;background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.015) 90%);-webkit-background-clip:text;background-clip:text;user-select:none;white-space:nowrap;}
+.f-big span{display:inline-block}
+.f-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--dim);border-top:1px solid var(--line);padding-top:22px;margin-top:20px}
+.f-row a{color:#bdbbc2;transition:color .2s}
+.f-row a:hover{color:#fff}
+
+/* окно с роликами */
+.modal{position:fixed;inset:0;z-index:100;background:rgba(4,4,7,.88);backdrop-filter:blur(20px);display:none;overflow-y:auto;padding:80px 24px 40px;overscroll-behavior:contain}
+.modal.open{display:block;animation:fade .35s forwards}
+.modal h3{font-family:Unbounded,sans-serif;font-weight:800;font-size:clamp(28px,4vw,48px);letter-spacing:-.04em;text-align:center;margin-bottom:34px}
+.vids{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;max-width:1200px;margin:0 auto}
+.vids>*{animation:pop .7s var(--ease) both;animation-delay:calc(var(--i)*70ms)}
+@keyframes pop{from{opacity:0;transform:translateY(30px) scale(.96)}}
+.vids video{width:240px;aspect-ratio:9/16;border-radius:16px;background:#111;object-fit:cover;border:1px solid var(--line)}
+.web-item{width:300px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px}
+.web-item .mock{position:relative;margin:0 auto 18px;width:150px}
+.web-item .mk{position:static;transform:none!important;filter:none!important;width:150px;font-size:9.4px;margin:0 auto}
+.web-item h4{font-family:Unbounded,sans-serif;font-weight:800;font-size:17px;letter-spacing:-.02em;margin-bottom:8px}
+.web-item p{font-size:13px;color:var(--muted);line-height:1.55}
+.close{position:fixed;top:20px;right:24px;width:46px;height:46px;border-radius:50%;background:var(--btn);color:#111;font-size:22px;transition:transform .4s var(--ease);z-index:2}
+.close:hover{transform:rotate(90deg)}
+
+@media (max-width:1100px){
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .case,.case:nth-child(even){grid-template-columns:1fr;gap:40px}
+  .case:nth-child(even) .ph-wrap{order:0}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:0}
+  .stat:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:700px){
+  header{padding:12px 16px}
+  nav{gap:14px} nav a.l{display:none}
+  section.s{padding:90px 16px}
+  .cards{grid-template-columns:1fr}
+  .c-grid{grid-template-columns:1fr;gap:18px}
+  .phone{width:220px}
+  .row{grid-template-columns:1fr auto;gap:6px 16px;padding:20px 8px}
+  .row span{grid-column:1/-1;order:3}
+  .row a{display:none}
+  .steps{grid-template-columns:1fr 1fr;gap:34px 18px}
+  .stat{padding:26px 18px}
+  .vids video{width:calc(50% - 9px)}
+  .hero-foot{left:16px;right:16px}
+  .hero-foot span:last-child{display:none}
+  .q button{font-size:15px}
+  .q .a p{padding-right:10px}
+  footer{padding:0 16px 22px}
+}
+.shot .grain{display:none}
+.shot .rv{opacity:1!important;transform:none!important;filter:none!important}
+.shot .split .ch{transform:none!important}
+.shot .badge,.shot .hero h1 span,.shot .hero p,.shot .down,.shot .hero-foot{animation:none!important;opacity:1;transform:none;filter:none}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .rv,.badge,.hero h1 span,.hero p,.down,.hero-foot{opacity:1;transform:none;filter:none}
+  .split .ch{transform:none}
+}
+</style>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+</head>
+<body>
+<div class="cur" id="cur"><span></span></div><div class="cur-dot" id="curDot"></div>
+<div id="progress"></div>
+<canvas id="field"></canvas>
+<div class="grain"></div>
+
+<header id="hdr">
+  <a href="#top" class="logo"><svg width="17" height="17" viewBox="0 0 24 24"><g fill="currentColor"><circle cx="12" cy="6.2" r="4"/><circle cx="17.5" cy="10.2" r="4"/><circle cx="15.4" cy="16.7" r="4"/><circle cx="8.6" cy="16.7" r="4"/><circle cx="6.5" cy="10.2" r="4"/></g><circle cx="12" cy="12" r="2.6" fill="#f2c44e"/></svg><span data-name>Torf1n</span></a>
+  <nav>
+    <a class="l" href="#works">Работы</a>
+    <a class="l" href="#cases">Кейсы</a>
+    <a class="l" href="#prices">Цены</a>
+    <a class="l" href="#faq">Вопросы</a>
+    <a class="btn sm mag" data-link="telegram" target="_blank" rel="noopener">Написать</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="badge"><i></i>Принимаю заказы</div>
+    <h1 class="big" id="title">Torf1n</h1>
+    <p>ИИ-видео и монтаж, сайты, лендинги и Telegram‑боты.<br>От идеи до готового результата под ключ.</p>
+    <a class="down mag" href="#works" aria-label="Листать вниз"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg></a>
+    <div class="hero-foot"><span>видео · сайты · боты</span><span>листай вниз</span></div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-row a"><div class="mq" id="mqA"></div></div>
+    <div class="mq-row b"><div class="mq" id="mqB"></div></div>
+  </div>
+
+  <section class="s" id="works">
+    <div class="center"><div class="eyebrow rv">(01) работы</div><h2 class="big split">мои работы</h2></div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section class="s" id="cases">
+    <div class="eyebrow rv">(02) кейсы</div>
+    <h2 class="big split">как это сделано</h2>
+    <div class="cases" id="caseList"></div>
+  </section>
+
+  <section class="s" style="padding-top:40px">
+    <div class="stats rv" id="stats"></div>
+  </section>
+
+  <section class="s" id="prices">
+    <div class="ph">
+      <div><div class="eyebrow rv">(03) цены</div><h2 class="big split">сколько стоит</h2></div>
+      <p class="rv">Точная цена зависит от задачи. Напиши, что нужно, и я посчитаю.</p>
+    </div>
+    <div id="rows"></div>
+  </section>
+
+  <section class="s" id="how">
+    <div class="eyebrow rv">(04) процесс</div>
+    <h2 class="big split">как я работаю</h2>
+    <div class="steps">
+      <div class="step rv"><div class="n">01</div><h4>Заявка</h4><p>Пишешь в Telegram, что нужно: ролик, сайт или бот. Примеры, которые нравятся, тоже присылай.</p></div>
+      <div class="step rv" style="transition-delay:.1s"><div class="n">02</div><h4>Предоплата</h4><p>Обсуждаем задачу, сроки и цену. Вносишь 50%, и я начинаю.</p></div>
+      <div class="step rv" style="transition-delay:.2s"><div class="n">03</div><h4>Черновик и правки</h4><p>Показываю первую версию: черновик ролика, макет сайта или тестовый бот. Две правки бесплатно.</p></div>
+      <div class="step rv" style="transition-delay:.3s"><div class="n">04</div><h4>Готовый результат</h4><p>Оплачиваешь остаток и получаешь видео в MP4, сайт на твоём домене или запущенного бота.</p></div>
+    </div>
+    <div class="tags rv"><span>✦ видео за 1–3 дня</span><span>✦ предоплата 50%</span><span>✦ 2 правки бесплатно</span><span>✦ сайт и бот под ключ</span></div>
+  </section>
+
+  <section class="s" id="faq">
+    <div class="center"><div class="eyebrow rv">(05) вопросы</div><h2 class="big split">частые вопросы</h2></div>
+    <div class="faq" id="faqList"></div>
+  </section>
+
+  <section class="s contact" id="contact">
+    <div class="eyebrow rv">(06) контакты</div>
+    <h2 class="big split">есть проект?</h2>
+    <p class="rv">Напиши, что нужно, и я отвечу с идеей и сроками.</p>
+    <div class="links rv" id="links"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="f-big"><span data-name>Torf1n</span></div>
+  <div class="f-row"><span><span data-name>Torf1n</span> · 2026</span><a href="#top">наверх ↑</a></div>
+</footer>
+
+<div class="modal" id="modal" data-lenis-prevent>
+  <button class="close" id="close" aria-label="Закрыть">×</button>
+  <h3 id="mtitle"></h3>
+  <div class="vids" id="vids"></div>
+</div>
+
+<script>
+/* ================================================================
+   НАСТРОЙКИ: меняй только этот блок
+   ================================================================ */
+const CONFIG = {
+  name: "Torf1n",                     // надпись в шапке, на главном экране и в подвале
+  links: {                            // свои ссылки вместо примеров
+    telegram:  "https://t.me/torff1nwork",
+    instagram: "https://www.instagram.com/torff1nai",
+  },
+  contactButtons: [                   // кнопки в блоке «есть проект?»
+    ["Написать @torff1nwork", "telegram"],
+    ["Instagram ↗", "instagram"],
+  ],
+  marquee: ["ии-видео", "монтаж reels", "сайты", "лендинги", "telegram-боты", "нейроозвучка", "моушн", "shorts"],
+  works: [                            // карточки «мои работы»; файлы лежат в папке works
+    { title:"ИИ-истории", meta:"5 работ · с озвучкой", glow:"rgba(255,190,60,.14)",
+      text:"Документальные ролики с нейроголосом: футбол, выживание. Каждая сцена подстроена под голос.",
+      items:["zidane","modric","drogba","istanbul","blackout"] },
+    { title:"Реклама", meta:"демо для бизнеса", glow:"rgba(255,140,60,.14)",
+      text:"Короткий рекламный ролик для кофейни, магазина или карточки товара на маркетплейсе.",
+      items:["coffee"], covers:["coffee","zidane","blackout"] },
+    { title:"YouTube Shorts", meta:"5 работ · на английском", glow:"rgba(90,220,140,.13)",
+      text:"Серия шортсов для англоязычного канала про игры: монтаж, озвучка, титры.",
+      items:["gta-five","gta-map","gta-lucia","gta-ps5","gta-xbox"] },
+    { title:"Сайты и боты", meta:"лендинги · Telegram-боты", glow:"rgba(80,160,255,.15)",
+      text:"Сайты-визитки, лендинги и Telegram-боты: запись клиентов, заявки, оплата.",
+      web:[
+        { mock:"tg",   title:"Telegram-бот",   text:"Запись клиентов, приём заявок, ответы на частые вопросы, рассылки и оплата прямо в чате." },
+        { mock:"site", title:"Сайт-портфолио", text:"Этот сайт — моя работа: анимации, адаптив под телефон, свой дизайн без шаблонов." },
+        { mock:"land", title:"Лендинг",        text:"Одностраничный сайт под товар или услугу: оффер, цены, отзывы и кнопка заявки." },
+      ] },
+  ],
+  cases: [                            // подробные кейсы; work — какую карточку открыть по ссылке
+    { title:"Серия ИИ-историй с озвучкой", video:"zidane", accent:"#f5b83d", work:0,
+      chips:["TikTok","9:16","нейроозвучка","серия"],
+      task:"Запустить канал с документальными роликами: нужен поток видео в одном стиле, а не один ролик.",
+      did:"Собрал конвейер на коде: сценарий → нейроголос → сцены сами подстраиваются под озвучку → рендер.",
+      result:"5 готовых роликов по 45–60 секунд: футбол и выживание. Правка одной фразы не требует пересобирать ролик.",
+      tools:["Remotion","ElevenLabs","React"] },
+    { title:"Шортсы к релизу GTA 6", video:"gta-map", accent:"#4fdc8c", work:2,
+      chips:["YouTube Shorts","английский","бренд канала"],
+      task:"Англоязычный канал к выходу игры: короткие ролики с новостями и фактами, узнаваемый стиль.",
+      did:"Сделал фирменные титры и цвета, английскую озвучку и динамичный монтаж под удержание.",
+      result:"5 шортсов в едином стиле канала, готовых к публикации по графику.",
+      tools:["Remotion","ElevenLabs","фирменный стиль"] },
+    { title:"Реклама для кофейни", video:"coffee", accent:"#ff9a4a", work:1,
+      chips:["демо","бизнес","22 секунды"],
+      task:"Показать, как выглядит короткая реклама для локального бизнеса в Reels и TikTok.",
+      did:"Написал оффер и сценарий, собрал вертикальный ролик с текстом на экране и призывом к действию.",
+      result:"Ролик на 22 секунды, который можно адаптировать под любую кофейню, магазин или студию.",
+      tools:["сценарий","Remotion","монтаж"] },
+    { title:"Этот сайт-портфолио", mock:"site", accent:"#9d8cff", work:3,
+      chips:["сайт","анимации","адаптив"],
+      task:"Сайт, где видно работы, услуги и цены, и откуда легко написать в Telegram.",
+      did:"Нарисовал живое поле цветов на canvas, плавную прокрутку, анимации появления и свой курсор.",
+      result:"Быстрый сайт без конструкторов и шаблонов, удобный с телефона. Ты сейчас на нём.",
+      tools:["HTML","CSS","JavaScript","Canvas"] },
+  ],
+  stats: [                            // цифры: [число, подпись, текст перед числом]
+    [11, "роликов в портфолио", ""],
+    [3,  "направления: видео, сайты и боты", ""],
+    [3,  "дня — обычный срок на ролик", "1–"],
+    [2,  "правки бесплатно в каждом заказе", ""],
+  ],
+  prices: [
+    ["монтаж reels",   "Монтаж из твоих исходников: хук в начале, субтитры, музыка и звуки.", "от 800 ₽"],
+    ["ии-ролик",       "До 30 секунд: сценарий, нейроозвучка, анимация, вертикаль 9:16.", "от 1 500 ₽"],
+    ["ии-история",     "45–60 секунд с озвучкой, как ролики про футбол в моих работах.", "от 3 000 ₽"],
+    ["реклама",        "Ролик для бизнеса: кофейня, магазин, карточка Wildberries или Ozon.", "от 2 000 ₽"],
+    ["серия роликов",  "8 роликов в месяц в одном стиле для твоего канала.", "от 12 000 ₽"],
+    ["telegram-бот",   "Бот для записи, заявок или магазина: кнопки, оплата, уведомления.", "от 3 000 ₽"],
+    ["лендинг",        "Одностраничный сайт под услугу или товар, удобный с телефона.", "от 5 000 ₽"],
+    ["сайт-портфолио", "Как этот: работы, цены, контакты и живые анимации.", "от 4 000 ₽"],
+    ["своя идея",      "Чего-то нет в списке? Опиши задачу, и я посчитаю.", "по запросу"],
+  ],
+  faq: [
+    ["Сколько времени занимает работа?", "Ролик обычно делаю за 1–3 дня, лендинг или Telegram-бот — от 3 до 10 дней, в зависимости от объёма. Точный срок называю до начала работы."],
+    ["Что нужно от меня?", "Задача и примеры, которые нравятся. Если есть исходники, логотип или тексты, присылай. Если нет, помогу со сценарием и текстами."],
+    ["Как проходит оплата?", "50% предоплата перед стартом, остальное после того, как тебя всё устроит. Оплата переводом на карту."],
+    ["Можно вносить правки?", "Да. Две правки входят в цену. Если нужно больше, договоримся заранее, без сюрпризов."],
+    ["Бот сможет принимать оплату и записывать клиентов?", "Да: кнопки и меню, запись на время, приём оплаты, уведомления тебе в Telegram и таблица с заявками."],
+    ["Делаешь серии роликов для канала?", "Да, это моя сильная сторона: ролики собираются на конвейере, поэтому серия из 10 видео в одном стиле выходит быстро и одинаково качественно."],
+  ],
+};
+/* ================================================================ */
+
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const fine = matchMedia("(hover:hover) and (pointer:fine)").matches;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const SHOT = location.search.includes("shot");   // режим для скриншота: всё сразу на месте
+if (SHOT) document.documentElement.classList.add("shot");
+const MOCKS = {
+  tg: `<div class="mk tg"><div class="bar"><div class="av"></div>Бот записи</div><div class="chat">
+        <div class="b">Привет! Выбери услугу 👇</div>
+        <div class="kb"><span>Стрижка</span><span>Маникюр</span><span>Брови</span><span>Цены</span></div>
+        <div class="b me">Маникюр</div><div class="b">Свободно завтра: 14:00 и 16:30</div></div></div>`,
+  site: `<img class="mk shot-img" src="works/site.jpg" alt="Главный экран этого сайта" loading="lazy">`,
+  land: `<div class="mk land"><div class="img"></div><div class="h">Кофейня «Зерно»</div>
+        <div>Скидка 20% на первый заказ</div><div class="cta">Заказать</div></div>`,
+};
+const ARROW = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>`;
+
+/* ---------- наполнение из CONFIG ---------- */
+document.title = CONFIG.name + " — видео, сайты и боты";
+$$("[data-name]").forEach(e => e.textContent = CONFIG.name);
+$$("[data-link]").forEach(e => e.href = CONFIG.links[e.dataset.link]);
+$("#title").classList.toggle("short", CONFIG.name.length <= 9);
+$("#title").innerHTML = CONFIG.name.split(" ").map((w,i) =>
+  `<span style="animation-delay:${.1+i*.14}s,${3+i*.25}s">${w}</span>`).join(" ");
+
+const mqHTML = CONFIG.marquee.map(t => `<span>${t}</span>`).join("");
+$("#mqA").innerHTML = mqHTML.repeat(4); $("#mqB").innerHTML = mqHTML.repeat(4);
+
+$("#cards").innerHTML = CONFIG.works.map((w,i) => {
+  let fan;
+  if (w.web) fan = w.web.map(x => MOCKS[x.mock]).join("");
+  else {
+    const c = w.covers || w.items;
+    fan = [c[1%c.length], c[0], c[2%c.length]].map(n=>`<img src="works/${n}.jpg" alt="" loading="lazy">`).join("");
+  }
+  return `<div class="rv" style="transition-delay:${i*.08}s"><div class="card" data-i="${i}" data-cursor="смотреть" style="--glow:${w.glow}">
+    <div class="fan">${fan}</div>
+    <div class="ci"><div class="meta">${w.meta}</div><h3>${w.title}</h3><p>${w.text}</p>
+    <div class="arrow">${ARROW}</div></div></div></div>`;
+}).join("");
+
+$("#caseList").innerHTML = CONFIG.cases.map((c,i) => `
+  <article class="case" style="--accent:${c.accent}">
+    <div class="ph-wrap rv"><div class="phone" ${c.video ? `data-cursor="смотреть" data-work="${c.work}"` : ""}>${c.video
+      ? `<video src="works/${c.video}.mp4" poster="works/${c.video}.jpg" muted loop playsinline preload="metadata"></video>`
+      : MOCKS[c.mock]}</div></div>
+    <div>
+      <div class="c-num rv">кейс <b>0${i+1}</b> / 0${CONFIG.cases.length}</div>
+      <h3 class="rv">${c.title}</h3>
+      <div class="chips rv">${c.chips.map(t=>`<span class="chip">${t}</span>`).join("")}</div>
+      <div class="c-grid rv"><div><h5>Задача</h5><p>${c.task}</p></div><div><h5>Что сделал</h5><p>${c.did}</p></div><div><h5>Результат</h5><p>${c.result}</p></div></div>
+      <div class="chips rv" style="margin-bottom:26px">${c.tools.map(t=>`<span class="chip" style="border-style:dashed">${t}</span>`).join("")}</div>
+      <a class="c-link rv" href="#" data-work="${c.work}">${CONFIG.works[c.work].web ? "посмотреть направление" : "смотреть все ролики"} ${ARROW}</a>
+    </div>
+  </article>`).join("");
+
+$("#stats").innerHTML = CONFIG.stats.map(([v,l,pre]) =>
+  `<div class="stat"><div class="v">${pre}<span data-count="${v}">0</span></div><div class="l">${l}</div></div>`).join("");
+
+$("#rows").innerHTML = CONFIG.prices.map(([t,d,p]) =>
+  `<div class="row rv"><b>${t}</b><span>${d}</span><i>${p}</i><a href="${CONFIG.links.telegram}" target="_blank" rel="noopener">${p==="по запросу"?"написать":"заказать"} →</a></div>`).join("");
+
+$("#faqList").innerHTML = CONFIG.faq.map(([q,a]) =>
+  `<div class="q rv"><button><span>${q}</span><i class="pl"></i></button><div class="a"><div><p>${a}</p></div></div></div>`).join("");
+$$(".q button").forEach(b => b.onclick = () => b.parentElement.classList.toggle("open"));
+
+$("#links").innerHTML = CONFIG.contactButtons.map(([t,k],i) =>
+  `<a class="btn mag ${i?"ghost":""}" href="${CONFIG.links[k]}" target="_blank" rel="noopener">${t}</a>`).join("");
+
+/* большая надпись в подвале всегда во всю ширину */
+function fitFooter() {
+  const el = $(".f-big"), sp = el.firstElementChild; el.style.fontSize = "";
+  const fs = parseFloat(getComputedStyle(el).fontSize);
+  el.style.fontSize = Math.min(fs * el.clientWidth / sp.offsetWidth * .96, innerHeight * .42) + "px";
+}
+addEventListener("resize", fitFooter);
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(fitFooter);
+
+/* заголовки по буквам */
+$$(".split").forEach(el => {
+  let i = 0;
+  el.innerHTML = el.textContent.trim().split(" ").map(w =>
+    `<span class="w">${[...w].map(ch => `<span class="ch" style="--i:${i++}">${ch}</span>`).join("")}</span>`).join(" ");
+});
+
+/* ---------- плавная прокрутка ---------- */
+let lenis = null;
+function startLenis() {
+  if (!window.Lenis || reduce) return;
+  lenis = new Lenis({ lerp: .085, smoothWheel: true });
+  const raf = t => { lenis.raf(t); requestAnimationFrame(raf); };
+  requestAnimationFrame(raf);
+}
+addEventListener("load", startLenis);
+document.addEventListener("click", e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || a.dataset.work !== undefined) return;
+  const id = a.getAttribute("href"), el = id === "#top" ? document.body : $(id);
+  if (!el) return;
+  e.preventDefault();
+  if (lenis) lenis.scrollTo(id === "#top" ? 0 : el, { offset: -40, duration: 1.6 });
+  else el.scrollIntoView({ behavior: "smooth" });
+});
+
+/* ---------- окно с роликами ---------- */
+const modal = $("#modal");
+function openWork(i) {
+  const w = CONFIG.works[i];
+  $("#mtitle").textContent = w.title;
+  $("#vids").innerHTML = w.web
+    ? w.web.map((x,k) => `<div class="web-item" style="--i:${k}"><div class="mock">${MOCKS[x.mock]}</div><h4>${x.title}</h4><p>${x.text}</p></div>`).join("")
+    : w.items.map((n,k) => `<video style="--i:${k}" src="works/${n}.mp4" poster="works/${n}.jpg" controls playsinline preload="none"></video>`).join("");
+  modal.classList.add("open"); modal.scrollTop = 0;
+  if (lenis) lenis.stop(); else document.body.style.overflow = "hidden";
+}
+function closeModal() {
+  if (!modal.classList.contains("open")) return;
+  modal.classList.remove("open"); $("#vids").innerHTML = "";
+  if (lenis) lenis.start(); else document.body.style.overflow = "";
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest(".card,[data-work]");
+  if (!t || modal.contains(t)) return;
+  e.preventDefault();
+  openWork(t.dataset.i ?? t.dataset.work);
+});
+$("#close").onclick = closeModal;
+modal.onclick = e => { if (e.target === modal) closeModal(); };
+addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+$("#vids").addEventListener("play", e => $$("#vids video").forEach(v => v !== e.target && v.pause()), true);
+
+/* ---------- появление при прокрутке ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  e.target.classList.add("in"); io.unobserve(e.target);
+  e.target.querySelectorAll("[data-count]").forEach(countUp);
+}), { threshold: .15 });
+$$(".rv,.split").forEach(e => io.observe(e));
+function countUp(el) {
+  const to = +el.dataset.count, t0 = performance.now(), d = 1600;
+  const step = now => { const k = Math.min(1, (now - t0) / d); el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3))); if (k < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+// ролики в кейсах играют, только когда видны
+const vio = new IntersectionObserver(es => es.forEach(e => e.isIntersecting ? e.target.play().catch(()=>{}) : e.target.pause()), { threshold: .3 });
+$$(".phone video").forEach(v => vio.observe(v));
+
+/* ---------- шапка, прогресс, бегущая строка, параллакс ---------- */
+let lastY = scrollY, vel = 0, mqx = 0;
+const hdr = $("#hdr"), prog = $("#progress"), mqA = $("#mqA"), mqB = $("#mqB"), phones = $$(".phone");
+function tick() {
+  const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+  vel += ((y - lastY) - vel) * .2;
+  hdr.classList.toggle("solid", y > 40);
+  if (y > innerHeight && y > lastY + 2) hdr.classList.add("hide");
+  else if (y < lastY - 2 || y < innerHeight) hdr.classList.remove("hide");
+  lastY = y;
+  prog.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+  if (!reduce) {
+    mqx -= .6 + Math.abs(vel) * .25;
+    const wA = mqA.scrollWidth / 4;
+    if (wA && -mqx > wA) mqx += wA;
+    mqA.style.transform = `translateX(${mqx}px)`;
+    mqB.style.transform = `translateX(${-wA - mqx}px)`;
+    for (const p of phones) {
+      const r = p.getBoundingClientRect();
+      if (r.bottom < -100 || r.top > innerHeight + 100) continue;
+      const k = (r.top + r.height/2 - innerHeight/2) / innerHeight;
+      p.style.transform = `translateY(${k * -60}px) rotate(${k * -6}deg)`;
+    }
+  }
+  requestAnimationFrame(tick);
+}
+tick();
+
+/* ---------- курсор и магнитные кнопки ---------- */
+if (fine && !reduce && !SHOT) {
+  document.documentElement.classList.add("has-cursor");
+  const ring = $("#cur"), dot = $("#curDot"), label = ring.querySelector("span");
+  let cx = innerWidth/2, cy = innerHeight/2, rx = cx, ry = cy;
+  addEventListener("pointermove", e => { cx = e.clientX; cy = e.clientY; dot.style.transform = `translate(${cx}px,${cy}px)`; });
+  (function loop(){ rx += (cx-rx)*.16; ry += (cy-ry)*.16; ring.style.transform = `translate(${rx}px,${ry}px)`; requestAnimationFrame(loop); })();
+  document.addEventListener("pointerover", e => {
+    const t = e.target.closest("[data-cursor],a,button,video");
+    const txt = t?.dataset?.cursor || "";
+    ring.classList.toggle("hover", !!t && !txt);
+    ring.classList.toggle("label", !!txt);
+    label.textContent = txt;
+  });
+  document.documentElement.addEventListener("pointerleave", () => { ring.style.opacity = 0; dot.style.opacity = 0; });
+  document.documentElement.addEventListener("pointerenter", () => { ring.style.opacity = 1; dot.style.opacity = 1; });
+
+  $$(".mag").forEach(el => {
+    el.addEventListener("pointermove", e => {
+      const r = el.getBoundingClientRect();
+      el.style.transform = `translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.35}px)`;
+    });
+    el.addEventListener("pointerleave", () => el.style.transform = "");
+  });
+  $$(".card").forEach(card => {
+    card.addEventListener("pointermove", e => {
+      const r = card.getBoundingClientRect(), px = (e.clientX-r.left)/r.width, py = (e.clientY-r.top)/r.height;
+      card.style.transition = "transform .15s linear,border-color .3s,box-shadow .5s";
+      card.style.transform = `perspective(900px) rotateX(${(.5-py)*9}deg) rotateY(${(px-.5)*11}deg) translateY(-8px)`;
+      card.style.setProperty("--gx", px*100 + "%"); card.style.setProperty("--gy", py*100 + "%");
+    });
+    card.addEventListener("pointerleave", () => { card.style.transition = ""; card.style.transform = ""; });
+  });
+}
+
+/* ---------- старт анимаций (без заставки) ---------- */
+let readyAt = null;
+(() => {
+  const go = () => { if (readyAt !== null) return; document.body.classList.add("ready"); readyAt = performance.now() - (SHOT ? 30000 : 0); };
+  if (SHOT) go();
+  ((document.fonts && document.fonts.ready) || Promise.resolve()).then(go);
+  setTimeout(go, 700);   // не ждём шрифты дольше 0,7 секунды
+})();
+
+/* ================================================================
+   Поле цветов (canvas)
+   ================================================================ */
+(() => {
+  const cv = $("#field"), ctx = cv.getContext("2d");
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+  let W, H, parts = [], petals = [], mx = -9999, my = -9999, smx = 0, smy = 0, lastS = scrollY;
+  const S = 128, R = 54;   // размер спрайта и радиус цветка
+  const tints = ["#ffffff","#ffffff","#fffdf8","#fff3f8","#f3f0ff","#eef9ff","#ecfbf5","#fff0f4","#f7f2ff"];
+  const blurOK = typeof document.createElement("canvas").getContext("2d").filter === "string";
+
+  // форма лепестка: sakura — с выемкой, round — круглый, thin — узкий
+  function petalPath(g, kind, r) {
+    g.beginPath(); g.moveTo(0, 0);
+    if (kind === "sakura") {
+      g.bezierCurveTo(-r*.5,-r*.28,-r*.46,-r*.86,-r*.17,-r*.99);
+      g.quadraticCurveTo(-r*.06,-r*.9,0,-r*.84);
+      g.quadraticCurveTo(r*.06,-r*.9,r*.17,-r*.99);
+      g.bezierCurveTo(r*.46,-r*.86,r*.5,-r*.28,0,0);
+    } else if (kind === "thin") {
+      g.bezierCurveTo(-r*.3,-r*.3,-r*.2,-r*.92,0,-r);
+      g.bezierCurveTo(r*.2,-r*.92,r*.3,-r*.3,0,0);
+    } else {
+      g.bezierCurveTo(-r*.56,-r*.34,-r*.42,-r,0,-r);
+      g.bezierCurveTo(r*.42,-r,r*.56,-r*.34,0,0);
+    }
+    g.closePath();
+  }
+  function flowerSprite(tint, kind, n) {
+    const c = document.createElement("canvas"); c.width = c.height = S;
+    const g = c.getContext("2d"); g.translate(S/2, S/2);
+    const r = kind === "thin" ? R*.92 : R;
+    for (let i = 0; i < n; i++) {
+      g.save(); g.rotate(i * Math.PI*2/n + (Math.random()-.5)*.12);
+      const sc = .92 + Math.random()*.14; g.scale(sc, sc);
+      g.shadowColor = "rgba(20,10,30,.35)"; g.shadowBlur = 6; g.shadowOffsetY = 1;
+      const gr = g.createLinearGradient(0, 0, 0, -r);
+      gr.addColorStop(0, "#d9cbd6"); gr.addColorStop(.28, tint); gr.addColorStop(.85, tint); gr.addColorStop(1, "#ffffff");
+      g.fillStyle = gr; petalPath(g, kind, r); g.fill();
+      g.shadowColor = "transparent";
+      // мягкая тень по краю и прожилка
+      const edge = g.createRadialGradient(0, -r*.5, r*.15, 0, -r*.5, r*.62);
+      edge.addColorStop(0, "rgba(255,255,255,0)"); edge.addColorStop(1, "rgba(150,135,170,.16)");
+      g.fillStyle = edge; petalPath(g, kind, r); g.fill();
+      g.strokeStyle = "rgba(140,120,160,.16)"; g.lineWidth = 1.1;
+      g.beginPath(); g.moveTo(0, -r*.12); g.quadraticCurveTo(r*.03, -r*.45, 0, -r*.72); g.stroke();
+      g.restore();
+    }
+    // серединка с тычинками
+    const cg = g.createRadialGradient(0, 0, 0, 0, 0, R*.2);
+    cg.addColorStop(0, "#fff4b8"); cg.addColorStop(.6, "#f2c44e"); cg.addColorStop(1, "rgba(214,150,40,0)");
+    g.fillStyle = cg; g.beginPath(); g.arc(0, 0, R*.2, 0, 7); g.fill();
+    for (let i = 0; i < 9; i++) {
+      const a = i/9*Math.PI*2 + Math.random()*.3, d = R*(.15 + Math.random()*.1);
+      g.strokeStyle = "rgba(230,180,70,.7)"; g.lineWidth = .8;
+      g.beginPath(); g.moveTo(0,0); g.lineTo(Math.cos(a)*d, Math.sin(a)*d); g.stroke();
+      g.fillStyle = "#c9862a"; g.beginPath(); g.arc(Math.cos(a)*d, Math.sin(a)*d, 1.5, 0, 7); g.fill();
+    }
+    return c;
+  }
+  function leafSprite(hue) {
+    const c = document.createElement("canvas"); c.width = c.height = 64;
+    const g = c.getContext("2d"); g.translate(32, 32);
+    const gr = g.createLinearGradient(-8, 0, 8, 0);
+    gr.addColorStop(0, `hsl(${hue},45%,14%)`); gr.addColorStop(1, `hsl(${hue},40%,24%)`);
+    g.fillStyle = gr; g.beginPath(); g.moveTo(0,-28); g.quadraticCurveTo(13,-6,0,28); g.quadraticCurveTo(-13,-6,0,-28); g.fill();
+    g.strokeStyle = `hsla(${hue},40%,40%,.5)`; g.lineWidth = 1; g.beginPath(); g.moveTo(0,-24); g.lineTo(0,24); g.stroke();
+    return c;
+  }
+  function petalSprite(tint) {
+    const c = document.createElement("canvas"); c.width = c.height = 48;
+    const g = c.getContext("2d"); g.translate(24, 38);
+    const gr = g.createLinearGradient(0, 0, 0, -34);
+    gr.addColorStop(0, "#e6d6e2"); gr.addColorStop(.4, tint); gr.addColorStop(1, "#fff");
+    g.fillStyle = gr; petalPath(g, "sakura", 34); g.fill(); return c;
+  }
+  function blurred(src, px) {
+    if (!blurOK) return src;
+    const c = document.createElement("canvas"); c.width = c.height = src.width;
+    const g = c.getContext("2d"); g.filter = `blur(${px}px)`; g.drawImage(src, 0, 0); return c;
+  }
+
+  const kinds = [["sakura",5],["sakura",5],["round",5],["round",6],["thin",8]];
+  const sprites = [], soft = [];
+  tints.forEach(t => kinds.forEach(([k,n]) => { const s = flowerSprite(t, k, n); sprites.push(s); soft.push(blurred(s, 5)); }));
+  const leaves = [150, 160, 170].map(leafSprite);
+  const petalSp = ["#fff","#fff3f8","#f3f0ff","#eef9ff"].map(petalSprite);
+
+  const gauss = () => (Math.random()+Math.random()+Math.random()-1.5)/1.5;
+  const easeBack = k => { const c = 1.7; return 1 + (c+1)*Math.pow(k-1,3) + c*Math.pow(k-1,2); };
+
+  function init() {
+    W = innerWidth; H = innerHeight;
+    cv.width = W*DPR; cv.height = H*DPR;
+    const n = Math.round(Math.min(2400, W*H/400));
+    parts = [];
+    for (let i = 0; i < n; i++) {
+      const z = Math.pow(Math.random(), 1.6);              // 0 = далеко, 1 = близко
+      const u = Math.random()*1.3 - .15;                   // позиция вдоль ленты
+      const isLeaf = Math.random() < .11;
+      const si = (Math.random()*sprites.length)|0;
+      parts.push({
+        u, z, isLeaf,
+        off: gauss() * (0.05 + z*0.42) + z*z*0.28,         // разброс поперёк ленты, близкие ниже
+        sp: isLeaf ? leaves[(Math.random()*3)|0] : (z > .93 && Math.random() < .4 ? soft[si] : sprites[si]),
+        size: (isLeaf ? 9 : 5) + z*z*34 + Math.random()*3,
+        rot: Math.random()*6.28, vr: (Math.random()-.5)*.008,
+        ph: Math.random()*6.28, dx: 0, dy: 0,
+        sx: (Math.random()-.5)*2, sy: -Math.random()*1.5-.3, // разлёт при прокрутке
+        birth: u*.9 + Math.random()*.5 + z*.25,            // когда распускается
+      });
+    }
+    parts.sort((a,b) => a.z - b.z);
+    petals = Array.from({length: Math.round(Math.min(46, W/30))}, () => newPetal(true));
+  }
+  function newPetal(anyY) {
+    return { x: Math.random()*W, y: anyY ? Math.random()*H : -30, z: .3 + Math.random()*.7,
+      vx: .2 + Math.random()*.5, vy: .35 + Math.random()*.6, rot: Math.random()*6.28, vr: (Math.random()-.5)*.03,
+      flip: Math.random()*6.28, vf: .02 + Math.random()*.03, ph: Math.random()*6.28, sp: petalSp[(Math.random()*petalSp.length)|0] };
+  }
+
+  addEventListener("resize", init);
+  addEventListener("pointermove", e => { mx = e.clientX; my = e.clientY; });
+  addEventListener("pointerleave", () => { mx = my = -9999; });
+
+  let t = 0;
+  function frame(now) {
+    t += 1/60;
+    const life0 = readyAt === null ? -1 : (now - readyAt) / 1000;
+    const sc = Math.min(scrollY / H, 3);
+    const burst = Math.min(sc, 1.2);
+    const dS = scrollY - lastS; lastS = scrollY;
+    smx += ((mx<0?W/2:mx) - W/2 - smx)*.04; smy += ((my<0?H/2:my) - H/2 - smy)*.04;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    ctx.clearRect(0,0,W,H);
+    const fade = 1 - Math.min(sc,1)*0.8;
+    const gust = 8 + 14*Math.max(0, Math.sin(t*.23));          // порывы ветра
+    if (life0 >= 0) for (const p of parts) {
+      const life = life0 - p.birth; if (life <= 0) continue;
+      const grow = life < 1 ? easeBack(life) : 1;
+      const yb = H*(.66 - .36*p.u) + Math.sin(p.u*5 + t*.5)*H*.035;
+      let x = p.u*W + Math.sin(t*.4 + p.ph)*6*(1+p.z) + Math.sin(t*1.1 - p.u*7)*gust*(.3+p.z) - smx*p.z*.05;
+      let y = yb + p.off*H + Math.cos(t*.55 + p.ph)*5*(1+p.z) - smy*p.z*.04;
+      x += p.sx*burst*W*.35*(.3+p.z);
+      y += p.sy*burst*H*.6*(.3+p.z) - sc*H*.08*p.z;
+      const ddx = x - mx, ddy = y - my, d2 = ddx*ddx + ddy*ddy, Rr = 130 + p.z*60;
+      if (d2 < Rr*Rr) { const d = Math.sqrt(d2)||1, f = (1-d/Rr)*26*(.4+p.z); p.dx += ddx/d*f*.12; p.dy += ddy/d*f*.12; p.vr += (ddx>0?1:-1)*.0006; }
+      p.dx *= .92; p.dy *= .92; p.vr *= .995; x += p.dx*6; y += p.dy*6;
+      p.rot += p.vr + (p.vr > 0 ? .0015 : -.0015);
+      if (x < -70 || x > W+70 || y < -70 || y > H+70) continue;
+      const a = (p.isLeaf ? .6 : .22 + p.z*.78) * fade * Math.min(1, life*2);
+      if (a < .02) continue;
+      const s = p.size * grow / p.sp.width, cs = Math.cos(p.rot)*s, sn = Math.sin(p.rot)*s;
+      ctx.globalAlpha = a;
+      ctx.setTransform(cs*DPR, sn*DPR, -sn*DPR, cs*DPR, x*DPR, y*DPR);
+      ctx.drawImage(p.sp, -p.sp.width/2, -p.sp.height/2);
+    }
+    // лепестки летят через всю страницу
+    if (life0 > .6) {
+      const pa = .55 + .35*(1 - Math.min(sc,1));
+      for (const q of petals) {
+        q.x += q.vx + Math.sin(t*.8 + q.ph)*.6 + gust*.02;
+        q.y += q.vy - dS*.25*q.z;
+        q.rot += q.vr; q.flip += q.vf;
+        if (q.y > H + 40 || q.x > W + 40) Object.assign(q, newPetal(false), { x: Math.random()*W*1.1 - W*.1 });
+        if (q.y < -60) q.y = H + 30;
+        const s = (10 + q.z*14) / 48, fx = Math.cos(q.flip);
+        const cs = Math.cos(q.rot)*s, sn = Math.sin(q.rot)*s;
+        ctx.globalAlpha = pa * (.4 + .6*q.z) * (.55 + .45*Math.abs(fx));
+        ctx.setTransform(cs*fx*DPR, sn*fx*DPR, -sn*DPR, cs*DPR, q.x*DPR, q.y*DPR);
+        ctx.drawImage(q.sp, -24, -38);
+      }
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(frame);
+  }
+  init(); requestAnimationFrame(frame);
+  if (SHOT) frame(performance.now());
+})();
+</script>
+</body>
+</html>
